@@ -1,0 +1,545 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta charset="utf-8" />
+<title>Dokumentasi Proyek FitLog Pro</title>
+<style>
+  @page {
+    size: A4;
+    margin: 2.2cm 2.2cm 2.2cm 2.2cm;
+  }
+  body {
+    font-family: "Calibri", "Segoe UI", Arial, sans-serif;
+    font-size: 11pt;
+    line-height: 1.5;
+    color: #1e293b;
+  }
+  .cover {
+    text-align: center;
+    padding: 40px 24px;
+    background-color: #1e3a8a;
+    color: #ffffff;
+    border-radius: 8px;
+    margin-bottom: 24px;
+  }
+  .cover h1 {
+    font-size: 26pt;
+    margin: 0 0 8px 0;
+    color: #ffffff;
+    border: none;
+  }
+  .cover h2 {
+    font-size: 13pt;
+    font-weight: normal;
+    margin: 0 0 16px 0;
+    color: #dbeafe;
+  }
+  .cover .badge {
+    display: inline-block;
+    padding: 5px 14px;
+    background-color: #2563eb;
+    color: #ffffff;
+    font-size: 10pt;
+    font-weight: bold;
+    border-radius: 20px;
+  }
+  h1 {
+    font-size: 16pt;
+    color: #1e3a8a;
+    border-bottom: 2px solid #2563eb;
+    padding-bottom: 4px;
+    margin-top: 24px;
+    margin-bottom: 10px;
+    page-break-after: avoid;
+  }
+  h2 {
+    font-size: 12.5pt;
+    color: #2563eb;
+    margin-top: 16px;
+    margin-bottom: 6px;
+    page-break-after: avoid;
+  }
+  p {
+    margin: 6px 0 10px 0;
+    text-align: justify;
+  }
+  ul, ol {
+    margin: 4px 0 12px 0;
+    padding-left: 22px;
+  }
+  li {
+    margin-bottom: 4px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 16px 0;
+    font-size: 10pt;
+  }
+  th {
+    background-color: #2563eb;
+    color: #ffffff;
+    font-weight: bold;
+    text-align: left;
+    padding: 8px 10px;
+    border: 1px solid #1d4ed8;
+  }
+  td {
+    padding: 7px 10px;
+    border: 1px solid #cbd5e1;
+    vertical-align: top;
+  }
+  tr:nth-child(even) td {
+    background-color: #f8fafc;
+  }
+  .box {
+    background-color: #eff6ff;
+    border-left: 4px solid #2563eb;
+    padding: 12px 14px;
+    margin: 12px 0;
+  }
+  .diagram {
+    background-color: #f8fafc;
+    border: 1px solid #cbd5e1;
+    padding: 14px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 9.5pt;
+    white-space: pre;
+    line-height: 1.35;
+    margin: 12px 0;
+    color: #0f172a;
+  }
+  code {
+    font-family: "Consolas", "Courier New", monospace;
+    background-color: #f1f5f9;
+    padding: 1px 4px;
+    font-size: 9.5pt;
+    color: #1e40af;
+  }
+  .page-break {
+    page-break-before: always;
+  }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="badge">DOKUMENTASI RANCANGAN &amp; IMPLEMENTASI SISTEM</div>
+  <h1>FitLog Pro</h1>
+  <h2>Pelacak Latihan Gym &amp; Rencana Olahraga Personal (Multi-Platform Web &amp; Android)</h2>
+  <p style="text-align:center; color:#bfdbfe; font-size:10pt; margin:0;">
+    Teknologi: Flutter (Dart) • Provider State Management • Supabase (PostgreSQL &amp; Auth) • Wger REST API v2
+  </p>
+</div>
+
+<h1>1. Analisis Permasalahan</h1>
+
+<h2>1.1 Latar Belakang dan Permasalahan yang Ingin Diselesaikan</h2>
+<p>Latihan kebugaran di gym membutuhkan perencanaan jadwal otot mingguan (<i>Workout Split</i>) serta pencatatan beban dan repetisi secara konsisten untuk mencapai prinsip <i>progressive overload</i>. Namun di lapangan, banyak pengguna masih menghadapi berbagai kendala:</p>
+<ul>
+  <li><b>Jadwal latihan tidak terstruktur:</b> Rencana latihan sering hanya ditulis di catatan manual atau diingat-ingat sehingga target set, repetisi, dan beban sesi sebelumnya mudah terlupa.</li>
+  <li><b>Kesulitan mencari referensi gerakan otot:</b> Pemula sering bingung memilih gerakan yang tepat untuk kelompok otot tertentu (Chest, Back, Legs, Shoulders, Arms, Abs) serta peralatan gym yang tersedia.</li>
+  <li><b>Evaluasi progres kurang terukur:</b> Tanpa grafik perkembangan total volume dan beban maksimal (<i>Personal Record / PR</i>), pengguna sulit melihat kemajuan latihan dari waktu ke waktu.</li>
+  <li><b>Perbedaan kebutuhan antar perangkat:</b> Menyusun jadwal mingguan dan menganalisis grafik lebih nyaman dilakukan di layar lebar (<b>Web di rumah</b>), sedangkan saat berlatih di gym pengguna membutuhkan tampilan ringkas di <b>Android</b> yang fokus pada checklist set selesai dan <b>Rest Timer</b> antar set.</li>
+</ul>
+
+<h2>1.2 Identifikasi Pengguna dan Kebutuhan Pengguna</h2>
+<ul>
+  <li><b>Pengguna Pemula Gym:</b> Membutuhkan katalog gerakan otot lengkap dengan ilustrasi, nama otot utama/pendukung, peralatan, dan panduan singkat.</li>
+  <li><b>Pengguna Rutin / Menengah:</b> Membutuhkan penyusun jadwal <i>Workout Split</i> 7 hari, pencatatan beban (kg) &amp; repetisi per set, Rest Timer otomatis, serta grafik progres volume &amp; beban maksimal.</li>
+  <li><b>Kebutuhan Sinkronisasi:</b> Akun, jadwal, dan riwayat latihan harus tersimpan di cloud sehingga otomatis sinkron antara Web dan Android.</li>
+</ul>
+
+<h2>1.3 Tujuan Pengembangan Aplikasi</h2>
+<ol>
+  <li>Membangun aplikasi <b>FitLog Pro</b> berbasis Flutter multi-platform (Web &amp; Android) dengan antarmuka modern bertema Biru &amp; Putih yang adaptif.</li>
+  <li>Menyediakan autentikasi pengguna (Daftar Akun &amp; Login) dan database cloud menggunakan <b>Supabase PostgreSQL</b> agar data tersinkronisasi lintas perangkat.</li>
+  <li>Mengintegrasikan <b>Wger Workout Manager REST API v2</b> untuk katalog ratusan gerakan otot beserta ilustrasinya.</li>
+  <li>Menyediakan mode <b>Home Planner</b> (Web) dan <b>Gym Companion + Rest Timer</b> (Android).</li>
+</ol>
+
+<h2>1.4 Batasan dan Ruang Lingkup Solusi</h2>
+<ul>
+  <li><b>Ruang Lingkup:</b> Aplikasi Web dan Android mencakup Autentikasi (Login/Register), Perencanaan Workout Split 7 hari, Katalog Gerakan Wger, Checklist Latihan Harian + Rest Timer, Grafik Progres interaktif, dan Profil Pengguna.</li>
+  <li><b>Batasan:</b> Tidak mencakup pencatatan kalori/nutrisi makanan, koneksi sensor smartwatch Bluetooth, maupun fitur jejaring sosial antar pengguna.</li>
+</ul>
+
+<h1>2. Analisis Kebutuhan Sistem</h1>
+
+<h2>2.1 Kebutuhan Fungsional</h2>
+<table>
+  <tr>
+    <th style="width:10%">Kode</th>
+    <th style="width:52%">Kebutuhan Fungsional</th>
+    <th style="width:38%">File Implementasi Utama</th>
+  </tr>
+  <tr>
+    <td><b>KF-01</b></td>
+    <td>Pengguna dapat mendaftar akun baru dan login menggunakan Email &amp; Password.</td>
+    <td><code>login_screen.dart</code>, <code>auth_provider.dart</code>, <code>supabase_service.dart</code></td>
+  </tr>
+  <tr>
+    <td><b>KF-02</b></td>
+    <td>Pengguna dapat menyusun, mengubah, dan menghapus jadwal <i>Workout Split</i> 7 hari (Senin–Minggu) serta menandai <i>Rest Day</i>.</td>
+    <td><code>workout_planner_screen.dart</code>, <code>workout_provider.dart</code></td>
+  </tr>
+  <tr>
+    <td><b>KF-03</b></td>
+    <td>Pengguna dapat mencari dan memfilter katalog ratusan gerakan otot dari Wger API lengkap dengan ilustrasi dan detail otot.</td>
+    <td><code>exercise_catalog_screen.dart</code>, <code>exercise_provider.dart</code>, <code>wger_api_service.dart</code></td>
+  </tr>
+  <tr>
+    <td><b>KF-04</b></td>
+    <td>Pengguna dapat menambahkan gerakan dari katalog langsung ke hari tertentu lengkap dengan target set, repetisi, beban, dan durasi rest.</td>
+    <td><code>exercise_catalog_screen.dart</code> → <code>workout_provider.dart</code></td>
+  </tr>
+  <tr>
+    <td><b>KF-05</b></td>
+    <td>Pengguna dapat membuka jadwal hari ini, mengedit beban/repetisi tiap set, dan mencentang set yang selesai.</td>
+    <td><code>today_workout_screen.dart</code>, <code>workout_provider.dart</code></td>
+  </tr>
+  <tr>
+    <td><b>KF-06</b></td>
+    <td>Sistem otomatis menjalankan <b>Rest Timer</b> saat set dicentang, dilengkapi tombol <code>-15s</code>, <code>Pause/Resume</code>, <code>+15s</code>, dan <code>Skip</code>.</td>
+    <td><code>rest_timer_provider.dart</code>, <code>rest_timer_banner.dart</code></td>
+  </tr>
+  <tr>
+    <td><b>KF-07</b></td>
+    <td>Pengguna dapat menyimpan sesi latihan selesai dan melihat grafik perkembangan total volume serta beban maksimal per gerakan.</td>
+    <td><code>progress_screen.dart</code>, <code>progress_chart_widget.dart</code></td>
+  </tr>
+  <tr>
+    <td><b>KF-08</b></td>
+    <td>Pengguna dapat membuka Profil (statistik ringkas &amp; status koneksi database), mengganti tema, dan keluar akun dari sidebar kiri bawah.</td>
+    <td><code>main_shell_screen.dart</code></td>
+  </tr>
+</table>
+
+<h2>2.2 Kebutuhan Nonfungsional</h2>
+<ul>
+  <li><b>Responsive &amp; Adaptive:</b> Antarmuka otomatis menyesuaikan ukuran layar (<code>width &gt;= 900px</code> untuk Web Desktop dan <code>&lt; 900px</code> untuk Mobile/Android).</li>
+  <li><b>Keamanan Data:</b> Autentikasi berbasis JWT (Supabase Auth) dan <b>Row Level Security (RLS)</b> pada PostgreSQL agar pengguna hanya dapat mengakses data miliknya sendiri (<code>auth.uid() = user_id</code>).</li>
+  <li><b>Reliabilitas Offline:</b> Menggunakan penyimpanan lokal <code>SharedPreferences</code> sebagai cache agar data tetap terbaca saat koneksi internet tidak stabil di dalam gym.</li>
+  <li><b>Usability &amp; Interaktivitas:</b> Tema Biru &amp; Putih bersih, animasi transisi halaman halus, animasi <i>shake</i> pada validasi error, stepper beban instan, dan grafik sentuh interaktif.</li>
+</ul>
+
+<h2>2.3 Daftar Fitur Utama dan Prioritas Pengembangan</h2>
+<ol>
+  <li><b>Prioritas Tinggi (Core):</b> Autentikasi Supabase (Login &amp; Register), Jadwal Split Mingguan, Katalog Gerakan Wger, dan Sinkronisasi Cloud PostgreSQL.</li>
+  <li><b>Prioritas Menengah (Gym Execution):</b> Mode Latihan Hari Ini (Checklist Set + edit beban/reps) dan Rest Timer Otomatis.</li>
+  <li><b>Prioritas Pendukung (Analytics &amp; UX):</b> Grafik Progres Interaktif, Profil Pengguna, dan Switch Tema Terang/Gelap.</li>
+</ol>
+
+<h2>2.4 Skenario Penggunaan Aplikasi</h2>
+<div class="box">
+  <b>Skenario 1 — Perencanaan di Rumah (Web):</b> Pengguna login di browser Chrome → membuka tab <i>Jadwal Split</i> → memilih <i>Katalog Wger</i> → memfilter otot Chest → memilih <i>Barbell Bench Press</i> → menambahkannya ke hari Senin (4 set × 8 reps, 60 kg) → data otomatis tersinkronisasi ke Supabase.<br/><br/>
+  <b>Skenario 2 — Eksekusi di Gym (Android):</b> Pengguna login di HP Android → langsung masuk tab <i>Latihan Hari Ini</i> → menyelesaikan Set #1 dan mencentang checkbox → <i>Rest Timer</i> 90 detik langsung menghitung mundur → setelah semua set selesai, klik <i>Selesaikan &amp; Simpan Sesi</i>.<br/><br/>
+  <b>Skenario 3 — Evaluasi Progres:</b> Pengguna membuka tab <i>Grafik Progres</i> → melihat 4 kartu KPI → memilih filter <i>Barbell Bench Press</i> → mengetuk titik grafik untuk memeriksa kenaikan beban dari sesi ke sesi.
+</div>
+
+<h1 class="page-break">3. Rancangan Solusi Multi-Platform</h1>
+
+<h2>3.1 Gambaran Solusi yang Diusulkan</h2>
+<p>FitLog Pro dibangun menggunakan <b>satu basis kode (Single Codebase Flutter)</b> yang mampu beradaptasi secara otomatis antara Web dan Android. Aplikasi menggabungkan <b>Supabase PostgreSQL</b> sebagai pusat data pribadi (akun, jadwal split, riwayat sesi) dengan <b>Wger REST API v2</b> sebagai penyedia katalog gerakan otot publik beserta ilustrasinya.</p>
+
+<h2>3.2 Platform Target dan Karakteristik Penggunaan</h2>
+<table>
+  <tr>
+    <th>Karakteristik</th>
+    <th>Web (Perencanaan di Rumah)</th>
+    <th>Android (Pendamping di Gym)</th>
+  </tr>
+  <tr>
+    <td><b>Halaman Awal Default</b></td>
+    <td>Jadwal Split Mingguan (<code>index 1</code>)</td>
+    <td>Latihan Hari Ini / Gym Mode (<code>index 0</code>)</td>
+  </tr>
+  <tr>
+    <td><b>Pola Navigasi</b></td>
+    <td>Left Sidebar permanen (248px) dengan Profil &amp; Tombol Keluar di kiri bawah</td>
+    <td>Bottom NavigationBar (4 tab) + Avatar Profil di pojok kiri atas</td>
+  </tr>
+  <tr>
+    <td><b>Tata Letak Konten</b></td>
+    <td>Multi-kolom: Split 2 kolom, Katalog 3–4 kolom, KPI 4 kolom</td>
+    <td>1 kolom vertikal ramah satu tangan + Rest Timer menempel di bawah</td>
+  </tr>
+</table>
+
+<h2>3.3 Rancangan Antarmuka (UI Design)</h2>
+<ul>
+  <li><b>Tema Visual:</b> Biru &amp; Putih (Royal Blue <code>#2563EB</code>, Sky Blue <code>#0EA5E9</code>, Deep Navy <code>#1E3A8A</code>, Putih <code>#FFFFFF</code>, Slate <code>#F8FAFC</code>).</li>
+  <li><b>Halaman Login &amp; Register:</b> Web menggunakan <i>Split Hero</i> biru dengan 2 kartu statistik <i>glassmorphism</i> interaktif + form putih di kanan; Android menggunakan header biru melengkung + kartu login melayang (<i>overlapping card</i>).</li>
+  <li><b>Jadwal Split:</b> Hero banner biru ringkasan mingguan, daftar 7 hari di kiri, dan editor gerakan di kanan dengan tombol cepat <code>-2.5 kg / +2.5 kg</code>.</li>
+  <li><b>Katalog Wger:</b> Bar pencarian &amp; filter kategori otot, kartu gerakan dengan ilustrasi dan pill kategori, serta modal detail biru untuk langsung menambahkan ke jadwal.</li>
+  <li><b>Grafik Progres:</b> 4 kartu KPI dengan badge tren, grafik area kustom interaktif dengan bar pembacaan titik terpilih, dan daftar riwayat sesi yang dapat dibuka detailnya.</li>
+</ul>
+
+<h2>3.4 Strategi Responsive / Adaptive UI</h2>
+<p>Aplikasi menggunakan evaluasi breakpoint <code>MediaQuery.sizeOf(context).width &gt;= 900</code> untuk mengubah struktur navigasi (Sidebar vs BottomBar), layout halaman Login (Split vs Curved Header), layout Planner (2 kolom vs chip horizontal), dan jumlah kolom Grid Katalog (4 / 3 / 2 / 1 kolom secara dinamis).</p>
+
+<h1 class="page-break">4. Arsitektur Sistem</h1>
+
+<h2>4.1 Diagram Arsitektur Aplikasi</h2>
+<div class="diagram">
++-----------------------------------------------------------------------------+
+|                    PRESENTATION LAYER (Flutter UI)                          |
+|  LoginScreen | MainShellScreen | TodayWorkout | WorkoutPlanner | Catalog |  |
+|  ProgressScreen | ExerciseCard | RestTimerBanner | ProgressChartWidget      |
++--------------------------------------+--------------------------------------+
+                                       | watch() / read()
+                                       v
++-----------------------------------------------------------------------------+
+|                STATE MANAGEMENT LAYER (Provider / ChangeNotifier)           |
+|   AuthProvider   |   WorkoutProvider   |   ExerciseProvider   | RestTimer   |
++--------------------------------------+--------------------------------------+
+                                       | memanggil method domain
+                                       v
++-----------------------------------------------------------------------------+
+|                        REPOSITORY LAYER (lib/data/repositories)             |
+|        AuthRepository       |      WorkoutRepository      | ExerciseRepo    |
++-------------------+-------------------------+--------------------+----------+
+                    |                         |                    |
+                    v                         v                    v
++-----------------------------+  +------------------------+  +----------------+
+|       SupabaseService       |  |     WgerApiService     |  | LocalStorage   |
+|  Auth (/auth/v1) &amp;          |  |  Exercise Catalog      |  | SharedPrefs    |
+|  PostgREST (/rest/v1)       |  |  (/api/v2/exerciseinfo)|  | (JSON Cache)   |
++--------------+--------------+  +-----------+------------+  +-------+--------+
+               |                             |                       |
+               v                             v                       v
+  [( Supabase PostgreSQL )]     [( Wger.de REST API v2 )]    [( Device Local )]
+  - profiles                    - exercisecategory           - auth_session
+  - workout_plans (RLS)         - exerciseinfo + images      - workout_plans
+  - workout_sessions (RLS)      - routine / workoutlog       - workout_logs
+</div>
+
+<h2>4.2 Struktur Komponen / Layer Aplikasi</h2>
+<ul>
+  <li><b>Core Layer (<code>lib/core/</code>):</b> Menyimpan konfigurasi endpoint Supabase &amp; Wger (<code>api_constants.dart</code>) serta definisi tema Material 3 (<code>app_theme.dart</code>).</li>
+  <li><b>Data Layer (<code>lib/data/</code>):</b> Terdiri dari <code>models/</code> (struktur objek &amp; serialisasi JSON), <code>datasources/</code> (HTTP client ke Supabase &amp; Wger serta akses SharedPreferences), dan <code>repositories/</code> (abstraksi pengambilan/penyimpanan data).</li>
+  <li><b>Provider Layer (<code>lib/providers/</code>):</b> Mengelola state reaktif dan memberi tahu UI melalui <code>notifyListeners()</code>.</li>
+  <li><b>Presentation Layer (<code>lib/presentation/</code>):</b> Berisi 6 halaman utama dan 3 widget reusable.</li>
+</ul>
+
+<h2>4.3 Mekanisme Pengelolaan State</h2>
+<p>Aplikasi menggunakan <b>Provider</b> dengan 4 <code>ChangeNotifier</code> yang didaftarkan pada <code>MultiProvider</code> di <code>lib/main.dart</code>: <code>AuthProvider</code> (sesi &amp; tema), <code>ExerciseProvider</code> (katalog, search, filter, pagination), <code>WorkoutProvider</code> (split, checklist aktif, riwayat, kalkulasi grafik), dan <code>RestTimerProvider</code> (countdown <code>Timer.periodic</code>).</p>
+
+<h2>4.4 Strategi Pengelolaan &amp; Penyimpanan Data</h2>
+<p>Menerapkan pola <b>Local-First + Cloud Sync</b>:</p>
+<ul>
+  <li><b>Supabase PostgreSQL:</b> Menyimpan tabel <code>profiles</code>, <code>workout_plans</code> (kolom <code>days</code> bertipe <code>jsonb</code>), dan <code>workout_sessions</code> (kolom <code>sets</code> bertipe <code>jsonb</code> + <code>total_volume</code>) dengan kebijakan <b>Row Level Security (RLS)</b>.</li>
+  <li><b>SharedPreferences:</b> Menyimpan cache JSON di perangkat sehingga UI langsung responsif tanpa menunggu jaringan dan tetap bisa dibuka saat offline.</li>
+</ul>
+
+<h2>4.5 Mekanisme Integrasi Backend / REST API</h2>
+<ul>
+  <li><b>Supabase Auth &amp; PostgREST:</b> Menggunakan <code>http</code> dengan header <code>apikey</code> + <code>Authorization: Bearer &lt;access_token&gt;</code> ke endpoint <code>/auth/v1/signup</code>, <code>/auth/v1/token?grant_type=password</code>, dan <code>/rest/v1/workout_plans</code> serta <code>/rest/v1/workout_sessions</code> (upsert dengan <code>Prefer: resolution=merge-duplicates</code>).</li>
+  <li><b>Wger REST API v2:</b> Mengambil kategori otot (<code>/api/v2/exercisecategory/</code>) dan detail gerakan lengkap beserta ilustrasi (<code>/api/v2/exerciseinfo/</code>) secara paginasi.</li>
+</ul>
+
+<h2>4.6 Alur Komunikasi Antarkomponen</h2>
+<p>Saat pengguna melakukan aksi di UI (misalnya mencentang set atau menambah gerakan) → UI memanggil method pada <b>Provider</b> → Provider memperbarui state lokal &amp; memanggil <b>Repository</b> → Repository menyimpan ke <code>SharedPreferences</code> dan mengirim HTTP request ke <b>Supabase/Wger API</b> → Provider memanggil <code>notifyListeners()</code> → seluruh widget yang mendengarkan otomatis ter-render ulang.</p>
+
+<h1 class="page-break">5. Pemilihan Teknologi</h1>
+<table>
+  <tr>
+    <th style="width:22%">Kategori</th>
+    <th style="width:28%">Teknologi / Package</th>
+    <th style="width:50%">Alasan Pemilihan Berdasarkan Kebutuhan Sistem</th>
+  </tr>
+  <tr>
+    <td><b>Framework &amp; Bahasa</b></td>
+    <td>Flutter &amp; Dart (^3.11)</td>
+    <td>Mendukung multi-platform Web dan Android dari satu basis kode dengan rendering UI kustom (termasuk <code>CustomPainter</code> untuk grafik) yang halus.</td>
+  </tr>
+  <tr>
+    <td><b>Database &amp; Auth</b></td>
+    <td>Supabase (PostgreSQL)</td>
+    <td>Gratis, langsung terhubung dari Flutter Web &amp; Android tanpa membangun server backend terpisah, mendukung SQL relasional, RLS keamanan per-user, dan Auth bawaan.</td>
+  </tr>
+  <tr>
+    <td><b>API Katalog Gym</b></td>
+    <td>Wger REST API v2</td>
+    <td>Menyediakan ratusan data gerakan gym gratis lengkap dengan kategori otot, alat, deskripsi, dan gambar ilustrasi.</td>
+  </tr>
+  <tr>
+    <td><b>State Management</b></td>
+    <td><code>provider: ^6.1.5</code></td>
+    <td>Ringan, mudah dipelihara, memisahkan logika bisnis dari tampilan, dan cocok untuk skala aplikasi menengah.</td>
+  </tr>
+  <tr>
+    <td><b>HTTP &amp; Storage</b></td>
+    <td><code>http: ^1.6.0</code>,<br/><code>shared_preferences: ^2.5.6</code>,<br/><code>intl: ^0.20.3</code></td>
+    <td>Kompatibel penuh di Web, Android, dan environment testing; memungkinkan komunikasi REST API langsung ke Supabase &amp; Wger serta caching lokal yang cepat.</td>
+  </tr>
+</table>
+
+<h1>6. Rencana Implementasi &amp; Panduan Isi Kode</h1>
+
+<h2>6.1 Struktur Proyek dan Penjelasan File Kode</h2>
+<table>
+  <tr>
+    <th style="width:36%">Lokasi File</th>
+    <th style="width:64%">Fungsi &amp; Isi Utama</th>
+  </tr>
+  <tr>
+    <td><code>supabase_schema.sql</code></td>
+    <td>Script SQL pembuatan tabel <code>profiles</code>, <code>workout_plans</code>, <code>workout_sessions</code> beserta aturan keamanan RLS di Supabase.</td>
+  </tr>
+  <tr>
+    <td><code>lib/main.dart</code></td>
+    <td>Inisialisasi <code>SharedPreferences</code>, <code>MultiProvider</code>, tema Biru &amp; Putih, serta <code>AnimatedSwitcher</code> antara Login dan halaman utama.</td>
+  </tr>
+  <tr>
+    <td><code>lib/core/constants/api_constants.dart</code></td>
+    <td>Menyimpan Project URL &amp; Publishable Key Supabase, endpoint Wger API v2, kredensial default, dan daftar nama hari.</td>
+  </tr>
+  <tr>
+    <td><code>lib/core/theme/app_theme.dart</code></td>
+    <td>Definisi warna Royal Blue/Sky Blue/White untuk <code>lightTheme</code> (default) dan <code>darkTheme</code>.</td>
+  </tr>
+  <tr>
+    <td><code>lib/data/models/*.dart</code></td>
+    <td>4 model data: <code>AuthSession</code>, <code>ExerciseModel</code>, <code>WorkoutPlan</code>/<code>WorkoutDay</code>/<code>PlannedExercise</code>, dan <code>WorkoutSessionLog</code>/<code>LoggedSet</code> (lengkap dengan rumus volume &amp; estimasi 1RM).</td>
+  </tr>
+  <tr>
+    <td><code>lib/data/datasources/supabase_service.dart</code></td>
+    <td>Menangani Register, Login, upsert profil, serta fetch/upsert <code>workout_plans</code> dan <code>workout_sessions</code> ke Supabase.</td>
+  </tr>
+  <tr>
+    <td><code>lib/data/datasources/wger_api_service.dart</code></td>
+    <td>Mengambil daftar kategori &amp; katalog gerakan dari Wger API v2 serta autentikasi JWT/Token Wger.</td>
+  </tr>
+  <tr>
+    <td><code>lib/data/datasources/local_storage_service.dart</code></td>
+    <td>Menyimpan &amp; membaca sesi login, jadwal split, riwayat log, dan mode tema di <code>SharedPreferences</code>.</td>
+  </tr>
+  <tr>
+    <td><code>lib/data/repositories/*.dart</code></td>
+    <td><code>AuthRepository</code>, <code>ExerciseRepository</code> (dengan fallback cache offline), dan <code>WorkoutRepository</code> (sinkronisasi lokal + Supabase/Wger).</td>
+  </tr>
+  <tr>
+    <td><code>lib/providers/*.dart</code></td>
+    <td><code>AuthProvider</code>, <code>ExerciseProvider</code>, <code>WorkoutProvider</code>, dan <code>RestTimerProvider</code> (timer hitung mundur antar set).</td>
+  </tr>
+  <tr>
+    <td><code>lib/presentation/screens/login_screen.dart</code></td>
+    <td>Halaman Login &amp; Daftar Akun adaptif Web/Android, animasi <i>shake</i> saat error, tombol <i>Isi Cepat</i>, dan kartu statistik <i>glass</i> interaktif.</td>
+  </tr>
+  <tr>
+    <td><code>lib/presentation/screens/main_shell_screen.dart</code></td>
+    <td>Kerangka utama adaptif: Left Sidebar (Profil interaktif &amp; tombol Keluar di kiri bawah) untuk Web, serta Bottom NavigationBar untuk Android.</td>
+  </tr>
+  <tr>
+    <td><code>lib/presentation/screens/today_workout_screen.dart</code></td>
+    <td>Mode Gym Hari Ini: pilih hari, progress bar, checklist set dengan edit beban/reps, pemicu Rest Timer otomatis, dan simpan sesi.</td>
+  </tr>
+  <tr>
+    <td><code>lib/presentation/screens/workout_planner_screen.dart</code></td>
+    <td>Mode Perencana Web: hero banner biru, daftar 7 hari, toggle Rest Day, stepper beban <code>+/- 2.5 kg</code> inline, dan tombol Sync Cloud.</td>
+  </tr>
+  <tr>
+    <td><code>lib/presentation/screens/exercise_catalog_screen.dart</code></td>
+    <td>Pencarian &amp; filter kategori gerakan Wger, grid kartu responsif (<code>exercise_card.dart</code>), dan modal detail biru untuk tambah ke jadwal.</td>
+  </tr>
+  <tr>
+    <td><code>lib/presentation/screens/progress_screen.dart</code></td>
+    <td>4 kartu KPI, grafik area interaktif (<code>progress_chart_widget.dart</code>) dengan filter metrik, dan riwayat sesi latihan.</td>
+  </tr>
+</table>
+
+<h2>6.2 Tahapan Pengembangan &amp; Progres Implementasi</h2>
+<ol>
+  <li><b>Tahap 1 — Fondasi &amp; Model (100%):</b> Pembuatan struktur folder clean architecture, konstanta API, tema Biru &amp; Putih, dan 4 data model.</li>
+  <li><b>Tahap 2 — Integrasi API &amp; Storage (100%):</b> Implementasi <code>WgerApiService</code>, <code>LocalStorageService</code>, dan <code>SupabaseService</code> (PostgreSQL + Auth + RLS).</li>
+  <li><b>Tahap 3 — State Management &amp; UI Adaptif (100%):</b> Implementasi 4 Provider dan 6 halaman adaptif Web &amp; Android sesuai desain Google Stitch.</li>
+  <li><b>Tahap 4 — Pengujian &amp; Verifikasi (100%):</b> <code>flutter analyze</code> lolos dengan <b>0 issue</b> dan <code>flutter test</code> lolos (<b>All tests passed</b>).</li>
+</ol>
+
+<h2>6.3 Kendala Teknis dan Rencana Penyelesaiannya</h2>
+<ul>
+  <li><b>Perubahan Endpoint Auth Wger:</b> Endpoint lama diganti Allauth Headless. <b>Solusi:</b> Menggunakan Supabase Auth untuk akun utama pengguna dan Wger API v2 untuk katalog gerakan publik.</li>
+  <li><b>Bentrok Import <code>TextDirection</code>:</b> Package <code>intl</code> bentrok dengan Flutter. <b>Solusi:</b> Menggunakan <code>import 'package:intl/intl.dart' show DateFormat;</code>.</li>
+  <li><b>Overflow Teks di Layar Sempit:</b> Terdeteksi lewat widget test pada halaman Login. <b>Solusi:</b> Membungkus teks dengan <code>Flexible</code> dan <code>TextOverflow.ellipsis</code>.</li>
+  <li><b>Sinkronisasi Web ↔ Android:</b> <code>SharedPreferences</code> hanya lokal per perangkat. <b>Solusi:</b> Integrasi database cloud <b>Supabase PostgreSQL</b>.</li>
+</ul>
+
+<h1 class="page-break">E. Panduan &amp; Outline Presentasi (10 Menit + 5 Menit Q&amp;A)</h1>
+<p>Berikut pembagian <b>10 Slide</b> ideal untuk presentasi berdurasi 10 menit (Media: PowerPoint / Google Slides / PDF):</p>
+<table>
+  <tr>
+    <th style="width:12%">Slide</th>
+    <th style="width:28%">Judul Slide</th>
+    <th style="width:48%">Poin Utama yang Disampaikan</th>
+    <th style="width:12%">Durasi</th>
+  </tr>
+  <tr>
+    <td><b>Slide 1</b></td>
+    <td>Cover &amp; Identitas Tim</td>
+    <td>Judul proyek <b>FitLog Pro</b>, konsep singkat, nama anggota kelompok.</td>
+    <td>0:30</td>
+  </tr>
+  <tr>
+    <td><b>Slide 2</b></td>
+    <td>Analisis Permasalahan</td>
+    <td>Latar belakang masalah pelaku gym, identifikasi pengguna, tujuan &amp; batasan sistem.</td>
+    <td>1:00</td>
+  </tr>
+  <tr>
+    <td><b>Slide 3</b></td>
+    <td>Analisis Kebutuhan</td>
+    <td>Ringkasan 8 kebutuhan fungsional, nonfungsional, dan prioritas fitur.</td>
+    <td>1:00</td>
+  </tr>
+  <tr>
+    <td><b>Slide 4</b></td>
+    <td>Solusi Multi-Platform</td>
+    <td>Perbedaan skenario Web (Home Planner) vs Android (Gym Companion + Rest Timer) &amp; strategi responsive UI.</td>
+    <td>1:00</td>
+  </tr>
+  <tr>
+    <td><b>Slide 5</b></td>
+    <td>Rancangan Antarmuka (UI)</td>
+    <td>Tampilkan mockup/screenshot Login, Jadwal Split, Katalog Wger, Gym Hari Ini, dan Grafik Progres.</td>
+    <td>1:00</td>
+  </tr>
+  <tr>
+    <td><b>Slide 6</b></td>
+    <td>Arsitektur Sistem</td>
+    <td>Tampilkan diagram 4 layer (Presentation → Provider → Repository → Supabase &amp; Wger API) dan alur komunikasi data.</td>
+    <td>1:30</td>
+  </tr>
+  <tr>
+    <td><b>Slide 7</b></td>
+    <td>Database &amp; Integrasi API</td>
+    <td>Tampilkan 3 tabel Supabase (<code>profiles</code>, <code>workout_plans</code>, <code>workout_sessions</code> + RLS) &amp; Wger API v2.</td>
+    <td>1:00</td>
+  </tr>
+  <tr>
+    <td><b>Slide 8</b></td>
+    <td>Pemilihan Teknologi</td>
+    <td>Alasan memilih Flutter, Provider, Supabase PostgreSQL, Wger API, dan SharedPreferences.</td>
+    <td>0:45</td>
+  </tr>
+  <tr>
+    <td><b>Slide 9</b></td>
+    <td>Demo Aplikasi &amp; Progres</td>
+    <td>Demo alur singkat (Login/Register → tambah gerakan → checklist set + Rest Timer → Grafik Progres &amp; tabel Supabase).</td>
+    <td>1:30</td>
+  </tr>
+  <tr>
+    <td><b>Slide 10</b></td>
+    <td>Kendala, Solusi &amp; Penutup</td>
+    <td>Ringkasan kendala teknis yang dipecahkan, hasil <code>flutter analyze/test</code>, dan buka sesi Q&amp;A (5 menit).</td>
+    <td>0:45</td>
+  </tr>
+</table>
+
+<div class="box">
+  <b>Tips Sesi Tanya Jawab (5 Menit):</b> Pastikan setiap anggota memahami (1) perbedaan tampilan Web vs Android dan breakpoint <code>900px</code>, (2) bagaimana <code>Provider</code> memperbarui UI dengan <code>notifyListeners()</code>, (3) kenapa pakai Supabase + Wger API, dan (4) bagaimana RLS di Supabase menjaga data tiap user tetap aman.
+</div>
+
+</body>
+</html>
